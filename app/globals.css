@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* ───────────────────────── HumanOS design tokens ─────────────────────────
+   Direction (studied from tavus.io/solutions/ai-interviewer, made our own):
+   – warm paper grounds, near-black ink, one dark band for product + footer
+   – Geist Sans for tight editorial headlines, Instrument Serif italic for
+     the single "human" accent word, DM Mono for small caps-style labels/CTAs
+   – imagery is our own ordered-dither renders of AI humans (no stock)
+   – one accent, HumanOS vermilion, used sparingly                          */
+
+@theme {
+  --color-paper: #f2efe8;
+  --color-sand: #e7e2d7;
+  --color-card: #faf8f4;
+  --color-ink: #0f0f10;
+  --color-coal: #161617;
+  --color-graphite: #222224;
+  --color-mute: #6e6b66;
+  --color-fog: #a9a59d;
+  --color-line: #d9d4c8;
+  --color-accent: #ff4f1f;
+  --color-accent-soft: #ffd9cc;
+
+  --font-sans: var(--font-geist-sans), "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "DM Mono", var(--font-geist-mono), ui-monospace, Menlo, monospace;
+  --font-serif: "Instrument Serif", Georgia, serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+  ::selection { background: var(--color-ink); color: var(--color-paper); }
+  :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: 4px; }
+  input, textarea, select { font-size: 16px; }
+  .grid > * { min-width: 0; }
+}
+
+@layer components {
+  .t-display {
+    font-size: clamp(2.9rem, 7.4vw, 7.6rem);
+    line-height: 0.93;
+    letter-spacing: -0.058em;
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-h2 {
+    font-size: clamp(2.2rem, 4.8vw, 4.6rem);
+    line-height: 0.98;
+    letter-spacing: -0.05em;
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-h3 {
+    font-size: clamp(1.45rem, 2.2vw, 2.1rem);
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-lead { font-size: clamp(1.06rem, 1.3vw, 1.25rem); line-height: 1.5; letter-spacing: -0.012em; text-wrap: pretty; }
+  .t-body { font-size: 1rem; line-height: 1.6; letter-spacing: -0.006em; text-wrap: pretty; }
+  /* Mono label — the Tavus-style system voice */
+  .t-mono {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .serif-i { font-family: var(--font-serif); font-style: italic; font-weight: 400; letter-spacing: -0.02em; }
+
+  .shell { width: 100%; max-width: 1360px; margin-inline: auto; padding-inline: clamp(18px, 3.6vw, 44px); }
+  .section { padding-block: clamp(80px, 10vw, 152px); }
+
+  /* Dotted rule used between blocks */
+  .dots { background-image: radial-gradient(currentColor 1px, transparent 1.2px); background-size: 8px 8px; }
+}
+
+@keyframes pulse-dot { 0%,100% { opacity: 1 } 50% { opacity: .35 } }
+.live-dot { animation: pulse-dot 1.6s ease-in-out infinite; }
+@keyframes caret { 50% { opacity: 0 } }
+.caret::after { content: "▍"; animation: caret 1s steps(1) infinite; margin-left: 2px; opacity: .7; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .live-dot, .caret::after { animation: none; }
+}
