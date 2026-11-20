@@ -85,7 +85,7 @@ export function Nav() {
         onMouseLeave={() => setOpen(null)}
       >
         <nav className="shell flex h-[68px] items-center gap-6" aria-label="Main">
-          <SiteLink href="/" className="shrink-0" aria-label="HumanOS home"><Logo /></SiteLink>
+          <SiteLink href="/" className="shrink-0" aria-label="ManavOS home"><Logo /></SiteLink>
           <ul className="ml-4 hidden items-center lg:flex">
             {NAV.map((g) => (
               <li key={g.label} className="relative" onMouseEnter={() => setOpen(g.items ? g.label : null)}>

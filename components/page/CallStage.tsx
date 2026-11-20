@@ -30,10 +30,12 @@ export function CallStage({ persona, name, script, label, aspect = "aspect-[4/5]
       )}
       <div className={`relative ${aspect}`}>
         <DitherHuman persona={persona} scene="night" dark="#0f0f10" light="#f2efe8" cell={3} yaw={0.15} speaking={line.who === "agent" && typing} label={`${name}, an AI persona, on a video call`} />
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-ink via-ink/75 to-transparent" />
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-gradient-to-t from-ink/90 via-ink/40 to-transparent" />
         <div className={`absolute inset-x-4 ${compact ? "bottom-5" : "bottom-20 sm:bottom-24"} sm:left-1/2 sm:right-auto sm:w-[min(720px,82%)] sm:-translate-x-1/2`}>
-          <p className="t-mono mb-2 text-center text-paper/50">{line.who === "agent" ? name : "You"}</p>
-          <p className={`text-balance text-center leading-snug tracking-[-0.02em] ${compact ? "text-[1rem]" : "text-[1.05rem] sm:text-[1.45rem]"} ${line.who === "agent" ? "text-paper" : "text-paper/60"} ${typing ? "caret" : ""}`}>{line.text.slice(0, chars)}</p>
+          <p className={`mx-auto w-fit max-w-full rounded-[10px] bg-black/55 px-3.5 py-2 text-balance text-center leading-snug tracking-[-0.01em] backdrop-blur-sm ${compact ? "text-[0.95rem]" : "text-[0.98rem] sm:text-[1.12rem]"}`}>
+            <span className="t-mono mr-2 text-paper/50">{line.who === "agent" ? name : "You"}</span>
+            <span className={`${line.who === "agent" ? "text-paper" : "text-paper/75"} ${typing ? "caret" : ""}`}>{line.text.slice(0, chars)}</span>
+          </p>
         </div>
         {!compact && (
           <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-2 sm:bottom-6" aria-hidden="true">

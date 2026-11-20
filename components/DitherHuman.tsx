@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { usePersonaMedia } from "@/lib/render/media";
 import { getEngine, hex, PERSONAS, SCENES, type PersonaKey, type Scene } from "@/lib/render/engine";
 
 type Props = {
@@ -26,13 +27,14 @@ export function DitherHuman({
   persona, scene = "paper", dark = "#0f0f10", light = "#f2efe8", cell = 2,
   yaw = 0.22, speaking = false, follow = false, className = "", label,
 }: Props) {
+  const media = usePersonaMedia(persona);
   const ref = useRef<HTMLCanvasElement>(null);
   const speakRef = useRef(speaking);
   speakRef.current = speaking;
 
   useEffect(() => {
     const canvas = ref.current;
-    if (!canvas) return;
+    if (!canvas || media) return;
     const ctx = canvas.getContext("2d");
     const engine = getEngine();
     if (!ctx) return;
@@ -93,7 +95,21 @@ export function DitherHuman({
       cancelAnimationFrame(raf); ro.disconnect(); io.disconnect();
       window.removeEventListener("pointermove", onMove);
     };
-  }, [persona, scene, dark, light, cell, yaw, follow]);
+  }, [persona, scene, dark, light, cell, yaw, follow, media]);
+
+  if (media) {
+    // Real footage: a photoreal human, framed like the render (head and shoulders).
+    return (
+      <video
+        key={media.video}
+        src={media.video}
+        poster={media.poster}
+        autoPlay muted loop playsInline preload="metadata"
+        role="img" aria-label={label}
+        className={`block h-full w-full object-cover object-[50%_25%] ${className}`}
+      />
+    );
+  }
 
   return (
     <canvas

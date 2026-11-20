@@ -21,7 +21,7 @@ export function Contact() {
           <RevealLines className="t-h2 mt-5" lines={["Talk to a", "solutions specialist."]} />
           <Reveal delay={0.1}>
             <p className="t-lead mt-6 max-w-[42ch] text-ink/70">Tell us what you&rsquo;re hiring or building for. A person on our team, not a bot, will reply within one business day.</p>
-            <p className="mt-8 text-[0.95rem] text-ink/60">Prefer email? <span className="text-ink">hello@humanos.ai</span></p>
+            <p className="mt-8 text-[0.95rem] text-ink/60">Prefer email? <span className="text-ink">hello@manavos.ai</span></p>
           </Reveal>
         </div>
         <Reveal className="lg:col-span-7" delay={0.1}>

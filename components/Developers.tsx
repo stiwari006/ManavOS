@@ -5,34 +5,34 @@ import { Reveal, RevealLines } from "./Reveal";
 import { useSite } from "./SiteContext";
 
 const CODE = {
-  TypeScript: `import { HumanOS } from "@humanos/sdk";
+  TypeScript: `import { ManavOS } from "@manavos/sdk";
 
-const hos = new HumanOS({ apiKey: process.env.HUMANOS_KEY });
+const hos = new ManavOS({ apiKey: process.env.HUMANOS_KEY });
 
 const interview = await hos.conversations.create({
   persona: "aarohi",
   brain: { provider: "anthropic", model: "claude" },
   rubric: "rb_data_analyst_v3",
   memory: { candidateId: "cand_0412" },
-  webhook: "https://ats.example.com/humanos",
+  webhook: "https://ats.example.com/manavos",
 });
 
 // Send the candidate a join link, or embed it
 console.log(interview.joinUrl);`,
-  Python: `from humanos import HumanOS
+  Python: `from manavos import ManavOS
 
-hos = HumanOS(api_key=os.environ["HUMANOS_KEY"])
+hos = ManavOS(api_key=os.environ["HUMANOS_KEY"])
 
 interview = hos.conversations.create(
     persona="aarohi",
     brain={"provider": "anthropic", "model": "claude"},
     rubric="rb_data_analyst_v3",
     memory={"candidate_id": "cand_0412"},
-    webhook="https://ats.example.com/humanos",
+    webhook="https://ats.example.com/manavos",
 )
 
 print(interview.join_url)`,
-  Webhook: `POST /humanos  conversation.completed
+  Webhook: `POST /manavos  conversation.completed
 {
   "id": "conv_8f21",
   "persona": "aarohi",
@@ -40,7 +40,7 @@ print(interview.join_url)`,
   "scores": { "structure": 3.6, "evidence": 3.1,
               "ownership": 3.7, "clarity": 3.2 },
   "recommendation": "advance",
-  "transcript_url": "https://api.humanos.ai/t/conv_8f21",
+  "transcript_url": "https://api.manavos.ai/t/conv_8f21",
   "perception": { "engagement": 0.82, "integrity": "clear" }
 }`,
 } as const;

@@ -1,3 +1,4 @@
+import { BRAND } from "@/lib/brand";
 export function LogoMark({ className = "" }: { className?: string }) {
   // A ring (the interface) holding an offset point (a presence looking back at you).
   return (
@@ -13,7 +14,7 @@ export function Logo({ className = "" }: { className?: string }) {
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <LogoMark className="h-[22px] w-[22px]" />
       <span className="text-[1.15rem] font-semibold tracking-[-0.04em]">
-        human<span className="font-medium opacity-60">OS</span>
+        {BRAND.wordmark[0]}<span className="font-medium opacity-60">{BRAND.wordmark[1]}</span>
       </span>
     </span>
   );

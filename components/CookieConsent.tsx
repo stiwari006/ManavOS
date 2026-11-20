@@ -31,7 +31,7 @@ export function CookieConsent() {
           className="fixed bottom-3 left-3 right-3 z-[90] max-w-[440px] rounded-[16px] border border-line bg-paper p-5 text-ink shadow-2xl sm:bottom-5 sm:left-5"
           initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 20, opacity: 0 }}>
           <p className="t-mono text-mute">Cookies</p>
-          <p className="mt-2 text-[0.95rem] leading-snug">We use essential cookies to run HumanOS, and optional ones only with your permission.</p>
+          <p className="mt-2 text-[0.95rem] leading-snug">We use essential cookies to run ManavOS, and optional ones only with your permission.</p>
           {detail && (
             <ul className="mt-4 divide-y divide-line border-y border-line">
               {CATS.map((c) => (

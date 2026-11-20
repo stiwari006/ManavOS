@@ -354,7 +354,7 @@ export function KeysPage() {
   const load = () => api.keys.list().then(setKeys);
   useEffect(() => { load(); }, []);
   const origin = typeof window !== "undefined" ? location.origin : "";
-  const curl = `curl -X POST ${origin}/api/v1/conversations \\\n  -H "Authorization: Bearer ${secret || "hos_live_…"}" \\\n  -H "Content-Type: application/json" \\\n  -d '{ "persona_id": "aarohi" }'`;
+  const curl = `curl -X POST ${origin}/api/v1/conversations \\\n  -H "Authorization: Bearer ${secret || "mos_live_…"}" \\\n  -H "Content-Type: application/json" \\\n  -d '{ "persona_id": "aarohi" }'`;
   return (
     <>
       <PageTitle title="API keys" sub="Use keys from your server only. Never ship them in a browser or mobile app." />
@@ -404,7 +404,7 @@ export function UsagePage() {
   if (!u) return <p className="t-mono text-mute">Loading…</p>;
   return (
     <>
-      <PageTitle title="Usage" sub={`${u.plan} plan · billing month ${u.month}`} action={<SiteLink href="/pricing" className={btnLine}>Change plan</SiteLink>} />
+      <PageTitle title="Usage" sub={`${u.plan} plan · billing month ${u.month}`} action={<BillingActions plan={u.plan} />} />
       <div className="grid gap-3 md:grid-cols-3">
         <div className={`${card} p-5`}><p className="t-mono text-mute">Live minutes</p><p className="mt-3 text-[2.4rem] font-medium leading-none tracking-[-0.05em]">{u.minutes}<span className="ml-1 text-[1rem] text-mute">/ {u.included}</span></p></div>
         <div className={`${card} p-5`}><p className="t-mono text-mute">Conversations</p><p className="mt-3 text-[2.4rem] font-medium leading-none tracking-[-0.05em]">{u.conversations}</p></div>
@@ -445,13 +445,54 @@ export function SettingsPage() {
         </section>
         <section className={`${card} p-5`}>
           <p className="t-mono mb-4 text-mute">Webhooks</p>
-          <label className="grid gap-1.5"><span className="text-[0.88rem]">Endpoint URL</span><input value={f.webhookUrl} onChange={(e) => setF({ ...f, webhookUrl: e.target.value })} className={field} placeholder="https://your-app.com/humanos-webhook" /></label>
-          <p className="mt-3 text-[0.85rem] text-mute">We sign each request with HMAC-SHA256 in the <code className="font-mono">X-HumanOS-Signature</code> header.</p>
+          <label className="grid gap-1.5"><span className="text-[0.88rem]">Endpoint URL</span><input value={f.webhookUrl} onChange={(e) => setF({ ...f, webhookUrl: e.target.value })} className={field} placeholder="https://your-app.com/manavos-webhook" /></label>
+          <p className="mt-3 text-[0.85rem] text-mute">We sign each request with HMAC-SHA256 in the <code className="font-mono">X-ManavOS-Signature</code> header.</p>
           {user.webhookSecret && <p className="mt-2 break-all font-mono text-[0.82rem]">Signing secret: {user.webhookSecret}</p>}
         </section>
         <Err msg={err} />
         <div className="flex items-center gap-3"><button className={btnDark}>Save changes</button>{msg && <span className="text-[0.9rem] text-mute">{msg}</span>}</div>
       </form>
+      <DangerZone />
     </>
+  );
+}
+
+function DangerZone() {
+  const [pw, setPw] = useState(""); const [err, setErr] = useState(""); const [busy, setBusy] = useState(false);
+  return (
+    <section className={`${card} mt-6 max-w-[640px] p-5`}>
+      <p className="t-mono mb-4 text-mute">Your data</p>
+      <p className="text-[0.92rem] text-mute">Download everything we hold about you (profile, personas, conversations, documents) as JSON.</p>
+      {api.exportUrl ? <a href={api.exportUrl} download="manavos-export.json" className={`${btnLine} mt-3 inline-flex`}>Export my data</a> : <p className="mt-3 text-[0.85rem] text-mute">Export works on the live site.</p>}
+      <hr className="my-6 border-line" />
+      <p className="font-medium">Delete account</p>
+      <p className="mt-1 text-[0.92rem] text-mute">Permanently deletes your account, personas, conversations, documents and API keys. This can't be undone.</p>
+      <form className="mt-3 flex flex-wrap gap-2" onSubmit={async (e) => {
+        e.preventDefault(); setErr("");
+        if (!confirm("Delete your account and all data permanently?")) return;
+        setBusy(true);
+        try { await api.deleteAccount(pw); go("/"); } catch (x) { setErr((x as Error).message); setBusy(false); }
+      }}>
+        <label className="sr-only" htmlFor="del-pw">Password</label>
+        <input id="del-pw" type="password" required value={pw} onChange={(e) => setPw(e.target.value)} placeholder="Confirm with your password" autoComplete="current-password" className={`${field} max-w-[300px]`} />
+        <button disabled={busy} className="t-mono h-11 rounded-full bg-accent px-5 text-ink disabled:opacity-50">{busy ? "Deleting…" : "Delete account"}</button>
+      </form>
+      <Err msg={err} />
+    </section>
+  );
+}
+
+function BillingActions({ plan }: { plan: string }) {
+  const { user } = useApp();
+  const [err, setErr] = useState(""); const [busy, setBusy] = useState("");
+  const run = async (k: string, f: () => Promise<string>) => { setErr(""); setBusy(k); try { location.href = await f(); } catch (x) { setErr((x as Error).message); setBusy(""); } };
+  if (!user.billing) return <SiteLink href="/pricing" className={btnLine}>Change plan</SiteLink>;
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {plan === "starter" && <button onClick={() => run("builder", () => api.checkout("builder"))} className={btnDark}>{busy === "builder" ? "Opening…" : "Upgrade to Builder"}</button>}
+      {plan !== "growth" && plan !== "enterprise" && <button onClick={() => run("growth", () => api.checkout("growth"))} className={btnLine}>{busy === "growth" ? "Opening…" : "Growth"}</button>}
+      {plan !== "starter" && <button onClick={() => run("portal", api.portal)} className={btnLine}>{busy === "portal" ? "Opening…" : "Manage billing"}</button>}
+      {err && <span role="alert" className="w-full text-[0.85rem] text-accent">{err}</span>}
+    </div>
   );
 }

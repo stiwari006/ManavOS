@@ -58,6 +58,12 @@ const live = {
   usage: () => req<Usage>("/api/usage"),
   settings: (b: { name?: string; company?: string; webhookUrl?: string }) => req<{ user: PublicUser }>("/api/settings", { method: "PATCH", body: JSON.stringify(b) }).then((d) => d.user),
   contact: (b: Record<string, string>) => post("/api/contact", b),
+  forgot: (email: string) => post("/api/auth/forgot", { email }),
+  reset: (token: string, password: string) => post<{ user: PublicUser }>("/api/auth/reset", { token, password }).then((d) => d.user),
+  deleteAccount: (password: string) => req("/api/account", { method: "DELETE", body: JSON.stringify({ password }) }),
+  exportUrl: "/api/account",
+  checkout: (plan: string) => post<{ url: string }>("/api/billing/checkout", { plan }).then((d) => d.url),
+  portal: () => post<{ url: string }>("/api/billing/portal").then((d) => d.url),
   tryLive: () => req<{ live: boolean }>("/api/try").then((d) => d.live).catch(() => false),
   tryTurn: (persona: string, turns: { role: "user" | "assistant"; content: string }[], onChunk: (s: string) => void) => streamText("/api/try", { persona, turns }, onChunk),
 };

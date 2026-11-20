@@ -1,6 +1,7 @@
 "use client";
 import { LogoMark } from "./Logo";
 import { SiteLink } from "@/lib/site/link";
+import { BRAND } from "@/lib/brand";
 
 const COLS: { h: string; links: [string, string][] }[] = [
   { h: "Company", links: [["About", "/about"], ["Careers", "/about#careers"], ["Research", "/research"], ["Contact", "/contact"]] },
@@ -18,7 +19,7 @@ const AI = [
 ];
 
 export function Footer() {
-  const q = encodeURIComponent("What is HumanOS and how do its AI human interviewers work?");
+  const q = encodeURIComponent("What is ManavOS and how do its AI human interviewers work?");
   return (
     <footer className="bg-ink text-paper">
       <div className="shell pt-20">
@@ -26,7 +27,7 @@ export function Footer() {
           <div className="lg:col-span-4">
             <LogoMark className="h-9 w-9" />
             <p className="mt-6 max-w-[30ch] text-[1.4rem] leading-tight tracking-[-0.035em]">The human interface for <span className="serif-i">everything</span> you build.</p>
-            <p className="mt-6 text-[0.9rem] text-paper/50">hello@humanos.ai · Toronto</p>
+            <p className="mt-6 text-[0.9rem] text-paper/50">hello@manavos.ai · Toronto</p>
             <button onClick={() => window.dispatchEvent(new Event("hos:cookies"))} className="mt-3 text-[0.85rem] text-paper/50 underline-offset-4 hover:text-paper hover:underline">Cookie preferences</button>
           </div>
           <nav className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:col-span-8" aria-label="Footer">
@@ -56,10 +57,10 @@ export function Footer() {
         </div>
 
         <p aria-hidden className="select-none pt-10 text-[clamp(4.5rem,19.5vw,19.5rem)] font-semibold leading-[0.78] tracking-[-0.075em] text-paper">
-          human<span className="text-paper/25">OS</span>
+          {BRAND.wordmark[0]}<span className="text-paper/25">{BRAND.wordmark[1]}</span>
         </p>
         <div className="flex flex-wrap justify-between gap-3 border-t border-white/10 py-6 text-[0.8rem] text-paper/40">
-          <span>© 2026 HumanOS · The human interface company</span>
+          <span>© 2026 ManavOS · The human interface company</span>
           <span>All rights reserved</span>
         </div>
       </div>

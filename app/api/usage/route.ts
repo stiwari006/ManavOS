@@ -1,7 +1,6 @@
 import { json, withUser } from "@/lib/server/http";
-import { myConversations } from "@/lib/server/service";
+import { PLAN_MINUTES as LIMIT, myConversations } from "@/lib/server/service";
 
-const LIMIT: Record<string, number> = { starter: 25, builder: 250, growth: 2000 };
 export async function GET() {
   return withUser(async (u) => {
     const month = new Date().toISOString().slice(0, 7);

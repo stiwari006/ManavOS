@@ -1,4 +1,4 @@
-# HumanOS: website + product
+# ManavOS: website + product
 
 Next.js 16 · TypeScript · Tailwind v4 · Framer Motion. Claude is the brain; Tavus renders photoreal video.
 

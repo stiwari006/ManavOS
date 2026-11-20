@@ -49,7 +49,7 @@ export function HomePage() {
             ))}
           </h1>
           <motion.div className="lg:col-span-4 lg:pb-3" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.45, ease }}>
-            <p className="t-lead text-ink/75">HumanOS gives your AI a face, a voice and a memory. Real-time, photoreal AI humans that see, listen, remember and act, built with one API.</p>
+            <p className="t-lead text-ink/75">ManavOS gives your AI a face, a voice and a memory. Real-time, photoreal AI humans that see, listen, remember and act, built with one API.</p>
             <div className="mt-6 flex flex-wrap gap-2">
               <button onClick={() => openAccount("signup")} className="t-mono group inline-flex h-12 items-center gap-2 rounded-full bg-ink px-6 text-paper hover:bg-graphite">Start building <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></button>
               <SiteLink href="/try" className="t-mono inline-flex h-12 items-center gap-2 rounded-full border border-ink/20 px-6 hover:border-ink"><span className="live-dot h-2 w-2 rounded-full bg-accent" />Talk to Aarohi</SiteLink>
@@ -79,7 +79,7 @@ export function HomePage() {
       {/* What you can build */}
       <section className="section">
         <div className="shell">
-          <SectionHead eyebrow="One platform" lines={["Build anything that", "needs a conversation."]} lead="HumanOS is the foundation for AI that meets people face to face. The same models power every persona; you decide who it is and what it does." />
+          <SectionHead eyebrow="One platform" lines={["Build anything that", "needs a conversation."]} lead="ManavOS is the foundation for AI that meets people face to face. The same models power every persona; you decide who it is and what it does." />
           <Reveal delay={0.1}>
             <ul className="mt-14 flex flex-wrap gap-x-3 gap-y-2 text-[clamp(1.6rem,3.6vw,3.2rem)] font-medium leading-[1.15] tracking-[-0.045em] lg:ml-[25%]">
               {BUILDS.map((b, i) => (
@@ -168,7 +168,7 @@ export function HomePage() {
       </section>
 
       <Enterprise />
-      <Closing lines={["Meet the next", "generation", "of AI."]} label="HumanOS" topic="Something else" />
+      <Closing lines={["Meet the next", "generation", "of AI."]} label="ManavOS" topic="Something else" />
     </>
   );
 }

@@ -6,18 +6,18 @@ export const DOCS: DocPage[] = [
     slug: "quickstart", group: "Get started", title: "Quickstart",
     lead: "Create an API key, pick a persona and start your first face-to-face conversation in about five minutes.",
     blocks: [
-      { h: "1. Create an API key", p: "Sign in to the dashboard and open API keys. Keys start with hos_live_ and are shown once. Store yours in an environment variable." },
-      { code: "export HUMANOS_API_KEY=hos_live_…", lang: "bash" },
+      { h: "1. Create an API key", p: "Sign in to the dashboard and open API keys. Keys start with mos_live_ and are shown once. Store yours in an environment variable." },
+      { code: "export MANAVOS_API_KEY=mos_live_…", lang: "bash" },
       { h: "2. Start a conversation", p: "Every account includes six stock personas. Create a conversation with one of them; the response includes a join URL." },
-      { code: `curl -X POST https://app.humanos.ai/api/v1/conversations \\
-  -H "Authorization: Bearer $HUMANOS_API_KEY" \\
+      { code: `curl -X POST https://app.manavos.ai/api/v1/conversations \\
+  -H "Authorization: Bearer $MANAVOS_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{ "persona_id": "aarohi" }'`, lang: "bash" },
       { code: `{
   "id": "conv_8f21",
   "persona_id": "aarohi",
   "status": "active",
-  "join_url": "https://app.humanos.ai/app/live/?id=conv_8f21",
+  "join_url": "https://app.manavos.ai/app/live/?id=conv_8f21",
   "mode": "video"
 }`, lang: "json" },
       { h: "3. Join or embed", p: "Open join_url in a browser, or embed it in an iframe with camera and microphone permissions. When the call ends, the transcript arrives via webhook." },
@@ -28,7 +28,7 @@ export const DOCS: DocPage[] = [
     slug: "authentication", group: "Get started", title: "Authentication",
     lead: "All API requests use a bearer token. Keys are scoped to a workspace and can be revoked at any time.",
     blocks: [
-      { code: `Authorization: Bearer hos_live_xxxxxxxxxxxxxxxx`, lang: "http" },
+      { code: `Authorization: Bearer mos_live_xxxxxxxxxxxxxxxx`, lang: "http" },
       { p: "Requests without a valid key return 401. Revoked keys stop working immediately. Never ship a key in client-side code: create conversations from your server and pass only the join URL to the browser." },
     ],
   },
@@ -70,7 +70,7 @@ export const DOCS: DocPage[] = [
     slug: "webhooks", group: "Core concepts", title: "Webhooks",
     lead: "Receive transcripts, perception notes and scores as soon as a conversation ends.",
     blocks: [
-      { p: "Set a webhook URL in Settings or per conversation. We send a POST with a JSON body and an X-HumanOS-Signature header (HMAC-SHA256 of the raw body with your signing secret)." },
+      { p: "Set a webhook URL in Settings or per conversation. We send a POST with a JSON body and an X-ManavOS-Signature header (HMAC-SHA256 of the raw body with your signing secret)." },
       { h: "Events", table: [["Event", "Sent when"], ["conversation.started", "The persona joins"], ["conversation.ended", "The session closes"], ["conversation.transcript_ready", "The full transcript is available"], ["conversation.scored", "Rubric scoring has completed"]] },
       { code: `{
   "event": "conversation.scored",
@@ -92,7 +92,7 @@ export const DOCS: DocPage[] = [
   },
   {
     slug: "api-reference", group: "Reference", title: "API reference",
-    lead: "Base URL: https://app.humanos.ai/api (or your own deployment). All bodies are JSON.",
+    lead: "Base URL: https://app.manavos.ai/api (or your own deployment). All bodies are JSON.",
     blocks: [
       { table: [["Method", "Path", "Description"], ["GET", "/v1/personas", "List personas"], ["POST", "/v1/personas", "Create a persona"], ["GET", "/v1/personas/{id}", "Get a persona"], ["DELETE", "/v1/personas/{id}", "Delete a persona"], ["POST", "/v1/conversations", "Start a conversation"], ["GET", "/v1/conversations", "List conversations"], ["GET", "/v1/conversations/{id}", "Get a conversation with transcript"], ["POST", "/v1/conversations/{id}/end", "End a conversation"]] },
       { h: "Errors", table: [["Status", "Meaning"], ["400", "Invalid request body"], ["401", "Missing or invalid API key"], ["404", "Resource not found"], ["429", "Concurrency or rate limit reached"], ["503", "Video capacity unavailable; retry or use voice mode"]] },

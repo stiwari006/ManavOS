@@ -59,6 +59,12 @@ export const repo = {
     async byEmail(email: string) { const id = await kv.get<string>(`ue/${email.toLowerCase()}`); return id ? kv.get<User>(`u/${id}`) : null; },
     async insert(u: User) { await kv.set(`u/${u.id}`, u); await kv.set(`ue/${u.email}`, u.id); },
     save: (u: User) => kv.set(`u/${u.id}`, u),
+    async del(u: User) { await kv.del(`ue/${u.email}`); await kv.del(`u/${u.id}`); },
+  },
+  resets: {
+    put: (hash: string, v: { userId: string; exp: number }) => kv.set(`pr/${hash}`, v),
+    get: (hash: string) => kv.get<{ userId: string; exp: number }>(`pr/${hash}`),
+    del: (hash: string) => kv.del(`pr/${hash}`),
   },
   personas: {
     list: (owner: string) => many<Persona>(`p/${owner}/`).then((l) => l.sort((a, b) => a.createdAt.localeCompare(b.createdAt))),
@@ -71,6 +77,7 @@ export const repo = {
     get: (owner: string, id: string) => kv.get<Conversation>(`c/${owner}/${id}`),
     async byTavus(tid: string) { const r = await kv.get<Ref>(`ct/${tid}`); return r ? kv.get<Conversation>(`c/${r.owner}/${r.id}`) : null; },
     async save(c: Conversation) { await kv.set(`c/${c.ownerId}/${c.id}`, c); if (c.tavusId) await kv.set(`ct/${c.tavusId}`, { owner: c.ownerId, id: c.id }); },
+    async del(c: Conversation) { if (c.tavusId) await kv.del(`ct/${c.tavusId}`); await kv.del(`c/${c.ownerId}/${c.id}`); },
   },
   keys: {
     list: (owner: string) => many<ApiKey>(`k/${owner}/`).then((l) => l.sort((a, b) => b.createdAt.localeCompare(a.createdAt))),
@@ -86,6 +93,10 @@ export const repo = {
     async del(owner: string, id: string) { const d = await kv.get<Doc>(`d/${owner}/${id}`); if (!d) return false; await kv.del(`d/${owner}/${id}`); return true; },
   },
   leads: { insert: (l: { id: string }) => kv.set(`l/${l.id}`, l) },
+  stripe: {
+    link: (customerId: string, userId: string) => kv.set(`sc/${customerId}`, userId),
+    userFor: (customerId: string) => kv.get<string>(`sc/${customerId}`),
+  },
 };
 
 export const id = (p: string) => `${p}_${crypto.randomUUID().replace(/-/g, "").slice(0, 12)}`;

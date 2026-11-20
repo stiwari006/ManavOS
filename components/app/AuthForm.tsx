@@ -43,10 +43,11 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         <label className="grid gap-1.5"><span className="t-mono text-mute">Work email</span><input name="email" type="email" required autoComplete="email" className={field} /></label>
         <label className="grid gap-1.5"><span className="t-mono text-mute">Password</span><input name="password" type="password" required minLength={8} autoComplete={mode === "signup" ? "new-password" : "current-password"} className={field} /></label>
       </div>
+      {mode === "login" && <p className="mt-3 text-right text-[0.88rem]"><SiteLink href="/forgot" className="text-mute underline hover:text-ink">Forgot password?</SiteLink></p>}
       {err && <p role="alert" className="mt-4 rounded-[10px] bg-accent-soft px-4 py-3 text-[0.9rem]">{err}</p>}
       <button disabled={busy} className="t-mono mt-6 h-12 w-full rounded-full bg-ink text-paper hover:bg-graphite disabled:opacity-50">{busy ? "One moment…" : mode === "signup" ? "Create account" : "Log in"}</button>
       <p className="mt-5 text-center text-[0.92rem] text-mute">
-        {mode === "signup" ? <>Already have an account? <SiteLink href="/login" className="text-ink underline">Log in</SiteLink></> : <>New to HumanOS? <SiteLink href="/signup" className="text-ink underline">Create an account</SiteLink></>}
+        {mode === "signup" ? <>Already have an account? <SiteLink href="/login" className="text-ink underline">Log in</SiteLink></> : <>New to ManavOS? <SiteLink href="/signup" className="text-ink underline">Create an account</SiteLink></>}
       </p>
       {DEMO && <p className="mt-4 text-center text-[0.8rem] text-mute">Preview build: accounts are stored only in this browser.</p>}
     </form>

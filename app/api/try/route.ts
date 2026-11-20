@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   const s = SOLUTIONS.find((x) => x.slug === b.persona) ?? SOLUTIONS[0];
   const turns = (b.turns || []).slice(-16).map((t) => ({ role: t.role === "assistant" ? "assistant" as const : "user" as const, content: String(t.content).slice(0, 1500), at: 0 }));
   if (!turns.length || turns[turns.length - 1].role !== "user") return fail(400, "Send a user turn");
-  const system = `${s.systemPrompt}\n\nThis is a short public demo on the HumanOS website. Keep replies under 40 words, spoken style, no markdown. If asked about HumanOS, it's a platform for real-time AI humans with Claude as the reasoning layer.`;
+  const system = `${s.systemPrompt}\n\nThis is a short public demo on the ManavOS website. Keep replies under 40 words, spoken style, no markdown. If asked about ManavOS, it's a platform for real-time AI humans with Claude as the reasoning layer.`;
   try {
     return new Response(await streamReply(system, turns, () => {}), { headers: { "content-type": "text/plain; charset=utf-8" } });
   } catch (e) { return fail(502, (e as Error).message); }

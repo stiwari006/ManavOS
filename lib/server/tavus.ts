@@ -56,3 +56,33 @@ export async function startConversation(palId: string, opts: { faceId?: string; 
 export const endConversation = (id: string) => call(`/conversations/${id}/end`, { method: "POST" });
 export const getConversation = (id: string) =>
   call<{ status: string; events?: { event_type: string; properties?: { transcript?: { role: string; content: string; timestamp?: number }[] } }[] }>(`/conversations/${id}?verbose=true`);
+
+/* Real faces. Each look (aarohi, dev, …) maps to a Tavus face so the marketing
+   site, the waiting room and the live call all show the same photoreal human.
+   Override with TAVUS_FACES="aarohi=r123,dev=r456,…"; otherwise stock faces
+   your plan can use are assigned in order. Cached for an hour. */
+export type FaceMedia = { faceId: string; name: string; video: string };
+const LOOKS = ["aarohi", "dev", "mira", "omar", "ines", "henry"] as const;
+let faceCache: { at: number; map: Record<string, FaceMedia> } | null = null;
+
+export async function faceMap(): Promise<Record<string, FaceMedia>> {
+  if (!KEY()) return {};
+  if (faceCache && Date.now() - faceCache.at < 3600_000) return faceCache.map;
+  try {
+    const r = await call<{ data: { face_id: string; face_name: string; thumbnail_video_url?: string; status?: string }[] }>("/faces?face_type=system&verbose=true&limit=60");
+    const faces = (r.data || []).filter((f) => f.thumbnail_video_url && f.status !== "error");
+    const byId = new Map(faces.map((f) => [f.face_id, f]));
+    const pinned = Object.fromEntries((process.env.TAVUS_FACES || "").split(",").map((s) => s.trim().split("=")).filter((p) => p.length === 2));
+    const used = new Set(Object.values(pinned));
+    const pool = faces.filter((f) => !used.has(f.face_id));
+    const map: Record<string, FaceMedia> = {};
+    LOOKS.forEach((look) => {
+      const f = pinned[look] ? byId.get(pinned[look]) : pool.shift();
+      if (f) map[look] = { faceId: f.face_id, name: f.face_name, video: f.thumbnail_video_url! };
+    });
+    faceCache = { at: Date.now(), map };
+    return map;
+  } catch {
+    return faceCache?.map ?? {};
+  }
+}

@@ -1,4 +1,4 @@
-/* HumanOS dither portrait shader.
+/* ManavOS dither portrait shader.
    A sculpted SDF bust (skull, jaw, nose, lips, eyes, ears, neck, shoulders,
    hair variants) is raymarched, lit with a key + rim light, then ordered-
    dithered (Bayer 8×8) to two colours — our halftone "photograph" look. */

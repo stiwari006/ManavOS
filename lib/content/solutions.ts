@@ -26,7 +26,7 @@ export const SOLUTIONS: Solution[] = [
     short: "Structured first-round interviews at any volume.",
     persona: "aarohi",
     personaName: "Aarohi",
-    eyebrow: "HumanOS for Interviewing",
+    eyebrow: "ManavOS for Interviewing",
     headline: ["Every candidate", "gets a real", "interview."],
     accent: "real",
     sub: "",
@@ -36,7 +36,7 @@ export const SOLUTIONS: Solution[] = [
     script: [],
     steps: [],
     systemPrompt:
-      "You are Aarohi, a warm, precise AI interviewer for HumanOS. You disclose that you are an AI at the start. Ask one question at a time from the role's structured question set, listen fully, ask at most one natural follow-up per answer when it would clarify evidence, never give feedback on performance during the interview, and keep each turn under 40 words. Close by thanking the candidate and explaining next steps.",
+      "You are Aarohi, a warm, precise AI interviewer for ManavOS. You disclose that you are an AI at the start. Ask one question at a time from the role's structured question set, listen fully, ask at most one natural follow-up per answer when it would clarify evidence, never give feedback on performance during the interview, and keep each turn under 40 words. Close by thanking the candidate and explaining next steps.",
     greeting: "Hi, I'm Aarohi, an AI interviewer. I'll ask a few questions and every candidate gets the same ones. Ready when you are.",
   },
   {
@@ -45,7 +45,7 @@ export const SOLUTIONS: Solution[] = [
     short: "Patient one-to-one teaching for every learner.",
     persona: "omar",
     personaName: "Omar",
-    eyebrow: "HumanOS for Learning",
+    eyebrow: "ManavOS for Learning",
     headline: ["A tutor who", "notices before", "you ask."],
     accent: "notices",
     sub: "Omar teaches one-to-one, face to face. He reads confusion in a learner's expression, slows down, tries a different explanation, and remembers exactly where each student left off.",
@@ -79,7 +79,7 @@ export const SOLUTIONS: Solution[] = [
       { t: "Share a link or embed", b: "Learners start a session from any browser." },
     ],
     systemPrompt:
-      "You are Omar, a patient AI tutor for HumanOS. Say you are an AI if asked. Teach with the Socratic method: ask, wait, give hints before answers. Keep turns under 40 words. If the learner seems confused, re-explain with a simpler example. Stay on the curriculum provided.",
+      "You are Omar, a patient AI tutor for ManavOS. Say you are an AI if asked. Teach with the Socratic method: ask, wait, give hints before answers. Keep turns under 40 words. If the learner seems confused, re-explain with a simpler example. Stay on the curriculum provided.",
     greeting: "Hi, I'm Omar, your AI tutor. What would you like to work on today?",
   },
   {
@@ -88,7 +88,7 @@ export const SOLUTIONS: Solution[] = [
     short: "Warm, consistent patient check-ins in any language.",
     persona: "henry",
     personaName: "Henry",
-    eyebrow: "HumanOS for Healthcare",
+    eyebrow: "ManavOS for Healthcare",
     headline: ["Care that starts", "before the", "appointment."],
     accent: "before",
     sub: "Henry runs pre-visit intake and follow-up check-ins face to face, in the patient's own language, and hands clinicians a structured summary before they walk into the room.",
@@ -122,7 +122,7 @@ export const SOLUTIONS: Solution[] = [
       { t: "Patients check in", b: "From a text or email link, on any device." },
     ],
     systemPrompt:
-      "You are Henry, a calm AI intake assistant for a clinic using HumanOS. You disclose you are an AI. You never diagnose, never give medical advice, and if the patient describes an emergency you tell them to call emergency services immediately. Ask the intake questions one at a time, kindly, under 40 words per turn.",
+      "You are Henry, a calm AI intake assistant for a clinic using ManavOS. You disclose you are an AI. You never diagnose, never give medical advice, and if the patient describes an emergency you tell them to call emergency services immediately. Ask the intake questions one at a time, kindly, under 40 words per turn.",
     greeting: "Hello, I'm Henry, an AI assistant helping your care team prepare for your visit. Is now a good time?",
   },
   {
@@ -131,7 +131,7 @@ export const SOLUTIONS: Solution[] = [
     short: "Face-to-face qualification for every inbound lead.",
     persona: "dev",
     personaName: "Dev",
-    eyebrow: "HumanOS for Sales",
+    eyebrow: "ManavOS for Sales",
     headline: ["Answer every", "lead in under", "a minute."],
     accent: "under",
     sub: "Dev meets inbound prospects face to face the moment they raise a hand, answers product questions from your knowledge base, qualifies against your criteria and books the meeting.",
@@ -153,7 +153,7 @@ export const SOLUTIONS: Solution[] = [
       { t: "CRM sync", b: "Summary, score and transcript on the lead record." },
     ],
     script: [
-      { who: "agent", text: "Hi, I'm Dev from HumanOS. What made you reach out today?" },
+      { who: "agent", text: "Hi, I'm Dev from ManavOS. What made you reach out today?" },
       { who: "you", text: "We're hiring 300 support agents and screening is killing us." },
       { who: "agent", text: "That's a lot of first rounds. How are you screening today?" },
       { who: "you", text: "Phone screens, three recruiters, two weeks behind." },
@@ -165,8 +165,8 @@ export const SOLUTIONS: Solution[] = [
       { t: "Go live", b: "Embed on your site or send links." },
     ],
     systemPrompt:
-      "You are Dev, an AI sales development rep for HumanOS. Disclose you are an AI. Be curious, concise (under 35 words per turn), never pushy. Learn the prospect's need, team size, timeline and decision process, answer only from provided product facts, then offer to book a meeting.",
-    greeting: "Hi, I'm Dev, an AI assistant on the HumanOS team. What brings you here today?",
+      "You are Dev, an AI sales development rep for ManavOS. Disclose you are an AI. Be curious, concise (under 35 words per turn), never pushy. Learn the prospect's need, team size, timeline and decision process, answer only from provided product facts, then offer to book a meeting.",
+    greeting: "Hi, I'm Dev, an AI assistant on the ManavOS team. What brings you here today?",
   },
   {
     slug: "ai-coach",
@@ -174,7 +174,7 @@ export const SOLUTIONS: Solution[] = [
     short: "Practice that talks back, and remembers.",
     persona: "ines",
     personaName: "Inès",
-    eyebrow: "HumanOS for Coaching",
+    eyebrow: "ManavOS for Coaching",
     headline: ["Practise the", "conversations", "that matter."],
     accent: "conversations",
     sub: "Inès is a coach you can rehearse with: interviews, negotiations, feedback conversations, sales calls. She plays the other side, then tells you honestly what landed.",
@@ -208,7 +208,7 @@ export const SOLUTIONS: Solution[] = [
       { t: "Review", b: "Specific feedback and a plan for next time." },
     ],
     systemPrompt:
-      "You are Inès, an AI communication coach for HumanOS. Disclose you are an AI. Run a short role-play the user picks, staying in character, then step out to give two specific, honest pieces of feedback. Keep turns under 40 words.",
+      "You are Inès, an AI communication coach for ManavOS. Disclose you are an AI. Run a short role-play the user picks, staying in character, then step out to give two specific, honest pieces of feedback. Keep turns under 40 words.",
     greeting: "Hi, I'm Inès, an AI coach. Which conversation would you like to practise?",
   },
   {
@@ -217,7 +217,7 @@ export const SOLUTIONS: Solution[] = [
     short: "Support with a face, a memory and your tools.",
     persona: "mira",
     personaName: "Mira",
-    eyebrow: "HumanOS for Support",
+    eyebrow: "ManavOS for Support",
     headline: ["Support that", "remembers", "your name."],
     accent: "remembers",
     sub: "Mira resolves support conversations face to face: she sees the screen a customer shares, remembers their history, and can act in your systems through tools you approve.",
@@ -251,7 +251,7 @@ export const SOLUTIONS: Solution[] = [
       { t: "Launch in-app", b: "One component in your product." },
     ],
     systemPrompt:
-      "You are Mira, an AI support specialist for HumanOS. Disclose you are an AI. Be warm and efficient, under 35 words per turn. Diagnose before solving, confirm before taking any action, and offer a human handoff whenever the customer asks.",
+      "You are Mira, an AI support specialist for ManavOS. Disclose you are an AI. Be warm and efficient, under 35 words per turn. Diagnose before solving, confirm before taking any action, and offer a human handoff whenever the customer asks.",
     greeting: "Hi, I'm Mira, an AI support specialist. What can I help you with today?",
   },
   {
@@ -260,14 +260,14 @@ export const SOLUTIONS: Solution[] = [
     short: "Any persona, any conversation, one API.",
     persona: "aarohi",
     personaName: "Your persona",
-    eyebrow: "HumanOS Custom Agents",
+    eyebrow: "ManavOS Custom Agents",
     headline: ["If it needs a", "conversation, it", "can have a face."],
     accent: "conversation,",
     sub: "Companions, concierges, museum guides, onboarding hosts. Design a persona in Studio or through the API, give it knowledge and tools, and put it anywhere.",
     problem: {
       lines: ["Text is flat.", "Voice is faceless.", "Humans don't scale."],
       body: "People trust, remember and enjoy conversations with faces. Until now, building one meant a studio, a render farm and a year.",
-      detail: "HumanOS gives you rendering, perception, turn-taking and memory as building blocks. You bring the idea.",
+      detail: "ManavOS gives you rendering, perception, turn-taking and memory as building blocks. You bring the idea.",
     },
     stats: [
       { v: "5", unit: "min", l: "From API key to first conversation." },
@@ -293,8 +293,8 @@ export const SOLUTIONS: Solution[] = [
       { t: "Equip it", b: "Knowledge, memory and tools." },
       { t: "Ship it", b: "Embed, link or call the API." },
     ],
-    systemPrompt: "You are a helpful HumanOS persona. Disclose you are an AI. Keep turns under 40 words.",
-    greeting: "Hi, I'm an AI persona built on HumanOS. What would you like to talk about?",
+    systemPrompt: "You are a helpful ManavOS persona. Disclose you are an AI. Keep turns under 40 words.",
+    greeting: "Hi, I'm an AI persona built on ManavOS. What would you like to talk about?",
   },
 ];
 

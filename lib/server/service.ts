@@ -4,9 +4,18 @@ import { SOLUTIONS } from "@/lib/content/solutions";
 import type { Capabilities, Conversation, Persona, Turn, User } from "@/lib/types";
 import { claudeReady, scoreTranscript } from "./claude";
 import { id, now, repo } from "./db";
-import { endConversation, ensurePal, startConversation, tavusReady } from "./tavus";
+import { endConversation, ensurePal, startConversation, tavusReady, faceMap } from "./tavus";
 
-export const capabilities = (): Capabilities => ({ video: tavusReady(), claude: claudeReady(), demo: false });
+export const capabilities = (): Capabilities => ({ video: tavusReady(), claude: claudeReady(), demo: false, billing: !!process.env.STRIPE_SECRET_KEY, email: !!process.env.RESEND_API_KEY });
+
+export const PLAN_MINUTES: Record<string, number> = { starter: 25, builder: 250, growth: 2000, enterprise: 1e9 };
+/** Live minutes used this calendar month (preview sessions are free). */
+export async function minutesUsed(uid: string) {
+  const month = new Date().toISOString().slice(0, 7);
+  const convs = (await repo.convs.list(uid)).filter((c) => c.startedAt.startsWith(month) && c.mode !== "preview");
+  return Math.ceil(convs.reduce((a, c) => a + (c.seconds ?? Math.round((Date.now() - Date.parse(c.startedAt)) / 1000)), 0) / 60);
+}
+export class QuotaError extends Error {}
 
 const RUBRICS: Record<string, string[]> = {
   "ai-interviewer": ["Structure", "Evidence & metrics", "Ownership", "Clarity"],
@@ -66,12 +75,19 @@ export async function startSession(ownerId: string, persona: Persona, opts: { pa
     participant: opts.participant, context: opts.context, transcript: [], startedAt: now(), source: opts.source,
   };
   const wantVideo = opts.preferMode !== "voice" && opts.preferMode !== "preview";
+  if (opts.preferMode !== "preview" && (tavusReady() || claudeReady())) {
+    const owner = await repo.users.byId(ownerId);
+    // Paid plans bill overage; the free plan stops at its included minutes.
+    if (owner && (owner.plan === "starter" || !owner.plan) && (await minutesUsed(ownerId)) >= PLAN_MINUTES.starter)
+      throw new QuotaError("You've used this month's free minutes. Upgrade your plan to keep talking.");
+  }
   if (wantVideo && tavusReady()) {
     const pal = await ensurePal(persona);
     if (persona.tavusPalId !== pal) { persona.tavusPalId = pal; await repo.personas.save(persona); }
     const docs = await repo.docs.getMany(ownerId, persona.documentIds);
     const knowledge = docs.map((d) => d.text).filter(Boolean).join("\n\n").slice(0, 8000);
-    const t = await startConversation(pal, { faceId: persona.faceId, participant: persona.memory ? opts.participant : undefined, context: [opts.context, knowledge].filter(Boolean).join("\n\n"), meetingUrl: opts.meetingUrl, name: `${persona.name} · ${conv.id}` });
+    const faceId = persona.faceId || (await faceMap())[persona.look]?.faceId;
+    const t = await startConversation(pal, { faceId, participant: persona.memory ? opts.participant : undefined, context: [opts.context, knowledge].filter(Boolean).join("\n\n"), meetingUrl: opts.meetingUrl, name: `${persona.name} · ${conv.id}` });
     conv.mode = "video"; conv.tavusId = t.conversation_id; conv.joinUrl = t.conversation_url;
   } else if (opts.preferMode !== "preview" && claudeReady()) {
     conv.mode = "voice";
@@ -114,7 +130,7 @@ export async function scoreAndNotify(c: Conversation) {
   if (u?.webhookUrl) {
     const payload = JSON.stringify({ event: c.scorecard ? "conversation.scored" : "conversation.transcript_ready", conversation_id: c.id, persona_id: c.personaId, transcript: c.transcript, scorecard: c.scorecard ?? null });
     const sig = createHmac("sha256", u.webhookSecret).update(payload).digest("hex");
-    await fetch(u.webhookUrl, { method: "POST", headers: { "content-type": "application/json", "x-humanos-signature": sig }, body: payload, signal: AbortSignal.timeout(5000) }).catch(() => {});
+    await fetch(u.webhookUrl, { method: "POST", headers: { "content-type": "application/json", "x-manavos-signature": sig }, body: payload, signal: AbortSignal.timeout(5000) }).catch(() => {});
   }
 }
 

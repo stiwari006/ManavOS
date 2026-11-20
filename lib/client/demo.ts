@@ -89,7 +89,7 @@ export const demo: Api = {
   },
   keys: {
     list: async () => load().keys,
-    create: async (name) => { const secret = "hos_test_" + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2); const k: ApiKeyView = { id: rid("key"), ownerId: load().user?.id || "", name: name || "Untitled key", prefix: secret.slice(0, 13), createdAt: now() }; load().keys.unshift(k); persist(); return { key: k, secret }; },
+    create: async (name) => { const secret = "mos_test_" + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2); const k: ApiKeyView = { id: rid("key"), ownerId: load().user?.id || "", name: name || "Untitled key", prefix: secret.slice(0, 13), createdAt: now() }; load().keys.unshift(k); persist(); return { key: k, secret }; },
     remove: async (id) => { const s = load(); s.keys = s.keys.filter((k) => k.id !== id); persist(); return {}; },
   },
   docs: {
@@ -104,6 +104,12 @@ export const demo: Api = {
   },
   settings: async (b) => { const s = load(); Object.assign(s.user!, b); persist(); return s.user!; },
   contact: async () => { await wait(400); return {}; },
+  forgot: async () => { await wait(300); return {}; },
+  reset: async () => { throw new Error("Password reset works on the live site."); },
+  deleteAccount: async () => { try { localStorage.removeItem(KEY); } catch {} mem = null; return {}; },
+  exportUrl: "",
+  checkout: async () => { throw new Error("Billing is available on the live site."); },
+  portal: async () => { throw new Error("Billing is available on the live site."); },
   tryLive: async () => false,
   tryTurn: async (_p, turns, onChunk) => {
     const n = turns.filter((t) => t.role === "user").length;

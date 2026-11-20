@@ -56,7 +56,7 @@ export function PricingPage() {
           </div>
         </div>
       </section>
-      <Closing lines={["Your first", "25 minutes", "are on us."]} label="HumanOS · Starter" topic="Pricing" />
+      <Closing lines={["Your first", "25 minutes", "are on us."]} label="ManavOS · Starter" topic="Pricing" />
     </>
   );
 }
@@ -187,7 +187,7 @@ export function ResearchPost({ p }: { p: Post }) {
         <h1 className="t-h2 mt-5">{p.title}</h1>
         <p className="t-lead mt-6 text-ink/70">{p.summary}</p>
         <div className="my-12 aspect-[16/9] overflow-hidden rounded-[18px] bg-ink">
-          <DitherHuman persona={p.slug.includes("body") ? "aarohi" : p.slug.includes("pause") ? "dev" : p.slug.includes("fair") ? "mira" : "ines"} scene="night" dark="#0f0f10" light="#f2efe8" cell={3} yaw={0.25} label="Research illustration: a HumanOS persona render" />
+          <DitherHuman persona={p.slug.includes("body") ? "aarohi" : p.slug.includes("pause") ? "dev" : p.slug.includes("fair") ? "mira" : "ines"} scene="night" dark="#0f0f10" light="#f2efe8" cell={3} yaw={0.25} label="Research illustration: a ManavOS persona render" />
         </div>
         <div className="space-y-5">{p.body.map((para, i) => <p key={i} className="text-[1.08rem] leading-[1.7] text-ink/80">{para}</p>)}</div>
       </div>
@@ -212,7 +212,7 @@ export function EnterprisePage() {
               { t: "No training on your data", b: "Customer conversations are never used to train shared models." },
               { t: "Human decisions", b: "Evaluations support people's decisions; we prohibit fully automated consequential decisions." },
               { t: "Security program", b: "Encryption, access reviews, penetration testing, and a SOC 2 Type II program in progress." },
-              { t: "Responsible disclosure", b: "Report vulnerabilities to security@humanos.ai. We respond within two business days." },
+              { t: "Responsible disclosure", b: "Report vulnerabilities to security@manavos.ai. We respond within two business days." },
             ]} />
           </div>
         </div>
@@ -229,10 +229,10 @@ export function AboutPage() {
       <section className="section">
         <div className="shell grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-6">
-            <div className="aspect-[4/5] overflow-hidden rounded-[18px] bg-sand"><DitherHuman persona="aarohi" scene="paper" dark="#0f0f10" light="#e7e2d7" cell={3} yaw={-0.25} follow label="Aarohi, HumanOS's first persona" /></div>
+            <div className="aspect-[4/5] overflow-hidden rounded-[18px] bg-sand"><DitherHuman persona="aarohi" scene="paper" dark="#0f0f10" light="#e7e2d7" cell={3} yaw={-0.25} follow label="Aarohi, ManavOS's first persona" /></div>
           </div>
           <div className="space-y-6 lg:col-span-6 lg:pt-10">
-            <p className="t-h3">HumanOS started with a simple observation: people open up to faces. We trust, remember and enjoy conversations with someone more than with something.</p>
+            <p className="t-h3">ManavOS started with a simple observation: people open up to faces. We trust, remember and enjoy conversations with someone more than with something.</p>
             <p className="t-body text-ink/70">So we're building the stack that lets any product meet people face to face: perception that notices, rendering that feels present, conversation that waits for meaning, and memory that makes the second conversation better than the first.</p>
             <p className="t-body text-ink/70">Our first persona, Aarohi, speaks English, Hindi and Hinglish, and always tells you she's an AI. She'll be the first of many.</p>
             <p className="t-body text-ink/70">We're based in Toronto, and we build with Claude as the reasoning layer at the heart of every persona.</p>
@@ -262,7 +262,7 @@ export function ContactPage() {
       <div className="pt-6" />
       <Contact />
       <section className="shell grid gap-3 pb-[clamp(80px,10vw,140px)] sm:grid-cols-3">
-        {[["Sales", "sales@humanos.ai"], ["Support", "support@humanos.ai"], ["Security", "security@humanos.ai"]].map(([k, v]) => (
+        {[["Sales", "sales@manavos.ai"], ["Support", "support@manavos.ai"], ["Security", "security@manavos.ai"]].map(([k, v]) => (
           <div key={k} className="rounded-[14px] border border-line bg-card p-5"><p className="t-mono text-mute">{k}</p><p className="mt-2 text-[1.1rem]">{v}</p></div>
         ))}
       </section>
@@ -310,7 +310,7 @@ export function StudioPage() {
           ]} /></div>
         </div>
       </section>
-      <Closing lines={["Your persona", "is a few clicks", "away."]} label="HumanOS · Studio" topic="Something else" />
+      <Closing lines={["Your persona", "is a few clicks", "away."]} label="ManavOS · Studio" topic="Something else" />
     </>
   );
 }

@@ -38,7 +38,7 @@ export function SolutionTemplate({ s }: { s: Solution }) {
         </div>
       </section>
 
-      <section className="shell pb-[clamp(80px,10vw,140px)]"><StatRow stats={s.stats} note="Product capabilities and design targets for the HumanOS beta." /></section>
+      <section className="shell pb-[clamp(80px,10vw,140px)]"><StatRow stats={s.stats} note="Product capabilities and design targets for the ManavOS beta." /></section>
 
       <section className="section border-t border-line">
         <div className="shell">
@@ -67,7 +67,7 @@ export function SolutionTemplate({ s }: { s: Solution }) {
       <Models />
       <Solutions exclude={s.slug} />
       <Contact />
-      <Closing lines={[`Meet ${s.personaName}.`, "Then build", "your own."]} persona={s.persona} topic={s.name} label={`HumanOS · ${s.name}`} />
+      <Closing lines={[`Meet ${s.personaName}.`, "Then build", "your own."]} persona={s.persona} topic={s.name} label={`ManavOS · ${s.name}`} />
     </>
   );
 }

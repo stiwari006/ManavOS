@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p ${PORT:-3000}",
-    "preview": "node scripts/preview.mjs"
+    "preview": "node scripts/preview.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "typecheck": "tsc --noEmit",
+    "faces": "node scripts/fetch-faces.mjs"
   },
   "dependencies": {
     "@fontsource/dm-mono": "^5.3.0",

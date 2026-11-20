@@ -98,7 +98,7 @@ export function Hero() {
 
           <div className="relative aspect-[4/5] sm:aspect-[16/9]">
             <DitherHuman persona="aarohi" scene={{ frame: [1.2, -2.2, 0.5], key: [-0.6, 0.45, 0.8], rim: [0.9, 0.35, -0.3], bg: 0.035, glow: 0.2, glowAt: [0.66, 0.22], exposure: 1.05, contrast: 1.2 }}
-              dark="#0f0f10" light="#f2efe8" cell={3} yaw={0.12} speaking={agentTalking} follow label="Aarohi, the HumanOS AI interviewer, speaking on a live video call" />
+              dark="#0f0f10" light="#f2efe8" cell={3} yaw={0.12} speaking={agentTalking} follow label="Aarohi, the ManavOS AI interviewer, speaking on a live video call" />
 
             {/* candidate self-view */}
             <div className="absolute right-3 top-3 w-[26%] min-w-[96px] max-w-[220px] overflow-hidden rounded-[10px] border border-white/15 sm:right-5 sm:top-5">

@@ -59,7 +59,7 @@ export function AccountDialog({ mode, onClose }: { mode: null | "signup" | "logi
                 {done ? "You're on the list." : type ? type.cta : mode === "login" ? "Which workspace are you signing in to?" : "Select an account type"}
               </h2>
               {!type && !done && (
-                <p className="t-body mt-3 max-w-[52ch] text-mute">Both run on the same HumanOS models. Pick the one that matches how you'll use it. You can add the other later.</p>
+                <p className="t-body mt-3 max-w-[52ch] text-mute">Both run on the same ManavOS models. Pick the one that matches how you'll use it. You can add the other later.</p>
               )}
 
               {!type && !done && (

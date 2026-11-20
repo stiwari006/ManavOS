@@ -1,9 +1,11 @@
+import { ip, limit } from "@/lib/server/ratelimit";
 import { hashPassword, publicUser, setSession } from "@/lib/server/auth";
 import { repo } from "@/lib/server/db";
 import { body, fail, json } from "@/lib/server/http";
 import { newUser } from "@/lib/server/service";
 
 export async function POST(req: Request) {
+  const rl = limit(`signup:${ip(req)}`, 5, 600); if (rl) return rl;
   const b = await body<{ email?: string; password?: string; name?: string; company?: string; type?: string; plan?: string }>(req);
   const email = (b.email || "").trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail(400, "Enter a valid email");

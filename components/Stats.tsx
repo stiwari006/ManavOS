@@ -24,7 +24,7 @@ export function Stats() {
             </Reveal>
           ))}
         </div>
-        <p className="mt-3 text-[0.8rem] text-mute">Platform design targets for the HumanOS beta.</p>
+        <p className="mt-3 text-[0.8rem] text-mute">Platform design targets for the ManavOS beta.</p>
       </div>
     </section>
   );

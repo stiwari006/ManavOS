@@ -62,8 +62,8 @@ export function VoiceStage({ name, look, turns, onSend, onEnd, endLabel = "End",
         <button onClick={() => { setVoiceOn(!voiceOn); sp.hush(); }} aria-label={voiceOn ? "Mute persona voice" : "Unmute persona voice"} className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full bg-ink/70 backdrop-blur hover:bg-ink">
           {voiceOn ? <Volume2 className="h-[18px] w-[18px]" /> : <VolumeX className="h-[18px] w-[18px]" />}
         </button>
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-ink via-ink/70 to-transparent" />
-        <p aria-live="polite" className="absolute inset-x-6 bottom-24 mx-auto max-w-[40ch] text-balance text-center text-[1.05rem] leading-snug tracking-[-0.02em] sm:text-[1.3rem]">{sp.interim || caption}</p>
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[28%] bg-gradient-to-t from-ink/90 via-ink/40 to-transparent" />
+        {(sp.interim || caption) && <p aria-live="polite" className="absolute inset-x-6 bottom-20 mx-auto w-fit max-w-[52ch] rounded-[10px] bg-black/55 px-3.5 py-2 text-balance text-center text-[0.98rem] leading-snug backdrop-blur-sm sm:text-[1.1rem]">{sp.interim || caption}</p>}
         <div className="absolute inset-x-0 bottom-5 flex justify-center gap-2">
           <button onClick={mic} aria-pressed={sp.listening} aria-label={sp.listening ? "Stop listening" : "Speak"} className={`grid h-12 w-12 place-items-center rounded-full transition ${sp.listening ? "bg-accent text-ink" : "bg-white/15 hover:bg-white/25"}`}>
             {sp.listening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}

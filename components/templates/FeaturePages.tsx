@@ -48,7 +48,7 @@ export function FeatureDetail({ f }: { f: Feature }) {
           ))}
         </div>
       </section>
-      <Closing lines={["Turn it on.", "Ship today."]} label={`HumanOS · ${f.name}`} topic="Developer API" />
+      <Closing lines={["Turn it on.", "Ship today."]} label={`ManavOS · ${f.name}`} topic="Developer API" />
     </>
   );
 }

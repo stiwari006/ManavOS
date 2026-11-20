@@ -9,7 +9,7 @@ export function generateStaticParams() {
 }
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const s = solution((await params).slug);
-  return { title: s ? `${s.name} — HumanOS` : "HumanOS", description: s?.sub };
+  return { title: s ? `${s.name} — ManavOS` : "ManavOS", description: s?.sub };
 }
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const s = solution((await params).slug);

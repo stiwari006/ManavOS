@@ -11,7 +11,7 @@ import { Problem } from "@/components/Problem";
 import { Solutions } from "@/components/Solutions";
 import { Stats } from "@/components/Stats";
 
-export const metadata: Metadata = { title: "AI Interviewer — HumanOS", description: "Structured, face-to-face first-round interviews at any volume, scored against your rubric." };
+export const metadata: Metadata = { title: "AI Interviewer — ManavOS", description: "Structured, face-to-face first-round interviews at any volume, scored against your rubric." };
 
 export default function Page() {
   return (

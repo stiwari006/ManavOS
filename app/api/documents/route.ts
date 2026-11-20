@@ -1,9 +1,11 @@
 import { id, now, repo } from "@/lib/server/db";
+import { limit } from "@/lib/server/ratelimit";
 import { body, fail, json, withUser } from "@/lib/server/http";
 
 export async function GET() { return withUser(async (u) => json({ documents: (await repo.docs.list(u.id)).map(({ text, ...d }) => ({ ...d, chars: text?.length ?? 0 })) })); }
 export async function POST(req: Request) {
   return withUser(async (u) => {
+    const rl = limit(`docs:${u.id}`, 30, 3600); if (rl) return rl;
     const b = await body<{ name?: string; url?: string; text?: string; tags?: string[] }>(req);
     if (!b.text?.trim() && !b.url?.trim()) return fail(400, "Add text or a URL");
     let text = b.text?.slice(0, 200000);

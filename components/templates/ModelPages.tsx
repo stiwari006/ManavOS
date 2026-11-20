@@ -66,7 +66,7 @@ export function ModelDetail({ m }: { m: Model }) {
           ))}
         </div>
       </section>
-      <Closing lines={["See it in a", "real conversation."]} persona={m.persona} label={`HumanOS · ${m.name}`} topic="Developer API" />
+      <Closing lines={["See it in a", "real conversation."]} persona={m.persona} label={`ManavOS · ${m.name}`} topic="Developer API" />
     </>
   );
 }

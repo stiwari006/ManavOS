@@ -4,7 +4,7 @@ import type { PersonaKey } from "@/lib/render/engine";
 import { RevealLines } from "./Reveal";
 import { useSite } from "./SiteContext";
 
-export function Closing({ lines = ["You haven’t met", "an interviewer", "like this."], persona = "aarohi", topic = "AI Interviewer", label = "HumanOS · Aarohi-1" }: { lines?: string[]; persona?: PersonaKey; topic?: string; label?: string }) {
+export function Closing({ lines = ["You haven’t met", "an interviewer", "like this."], persona = "aarohi", topic = "AI Interviewer", label = "ManavOS · Aarohi-1" }: { lines?: string[]; persona?: PersonaKey; topic?: string; label?: string }) {
   const { openAccount, contactAbout } = useSite();
   return (
     <section className="shell pb-[clamp(80px,10vw,140px)]">

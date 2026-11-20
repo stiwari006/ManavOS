@@ -7,7 +7,7 @@ import { Reveal, RevealLines } from "./Reveal";
 
 const YAW = [0.3, -0.3, 0.25, -0.25, 0.3, -0.2, 0.2];
 
-export function Solutions({ exclude, title = ["Explore other", "HumanOS solutions."] }: { exclude?: string; title?: string[] }) {
+export function Solutions({ exclude, title = ["Explore other", "ManavOS solutions."] }: { exclude?: string; title?: string[] }) {
   const list = SOLUTIONS.filter((s) => s.slug !== exclude).slice(0, 6);
   return (
     <section id="solutions" className="section bg-sand/60">

@@ -1,5 +1,6 @@
 import { streamReply } from "@/lib/server/claude";
 import { repo } from "@/lib/server/db";
+import { limit } from "@/lib/server/ratelimit";
 import { body, fail, withUser } from "@/lib/server/http";
 import { addTurn, previewReply, systemFor } from "@/lib/server/service";
 
@@ -7,6 +8,7 @@ import { addTurn, previewReply, systemFor } from "@/lib/server/service";
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   return withUser(async (u) => {
+    const rl = limit(`turn:${u.id}`, 40, 60); if (rl) return rl;
     const c = await repo.convs.get(u.id, id);
     if (!c || c.status !== "active" || c.mode === "video") return fail(400, "Conversation is not an active voice session");
     const p = await repo.personas.get(u.id, c.personaId);

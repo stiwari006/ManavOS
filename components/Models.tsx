@@ -82,7 +82,7 @@ export function Models() {
     <section id="models" className="section border-t border-line">
       <div className="shell">
         <div className="grid gap-6 lg:grid-cols-12">
-          <p className="t-mono text-mute lg:col-span-3">The HumanOS models</p>
+          <p className="t-mono text-mute lg:col-span-3">The ManavOS models</p>
           <div className="lg:col-span-9">
             <RevealLines className="t-h2" lines={["Four models.", "One presence."]} />
             <Reveal delay={0.1}>

@@ -1,5 +1,5 @@
 /* ──────────────────────────────────────────────────────────────────────────
-   HumanOS dither renderer
+   ManavOS dither renderer
    Builds a parametric head-and-shoulders point model, lights it, z-buffers
    it into a low-res luminance buffer, then ordered-dithers (Bayer 8×8) to two
    colours. This is the site's original imagery language — swap any figure
