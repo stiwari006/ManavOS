@@ -1,5 +1,5 @@
 "use client";
-import { BarChart3, BookOpen, FileText, Home, KeyRound, LogOut, Menu, MessagesSquare, Settings, Users, X } from "lucide-react";
+import { BarChart3, BookOpen, FileText, Home, KeyRound, LogOut, Menu, MessagesSquare, Settings, Users, X, ScanFace } from "lucide-react";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { MotionConfig } from "framer-motion";
 import { api } from "@/lib/client/api";
@@ -14,6 +14,7 @@ export const useApp = () => useContext(AppCtx)!;
 const NAV = [
   { href: "/app", label: "Overview", icon: Home },
   { href: "/app/personas", label: "Personas", icon: Users },
+  { href: "/app/faces", label: "Faces", icon: ScanFace },
   { href: "/app/conversations", label: "Conversations", icon: MessagesSquare },
   { href: "/app/knowledge", label: "Knowledge", icon: FileText },
   { href: "/app/keys", label: "API keys", icon: KeyRound },

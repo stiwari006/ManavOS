@@ -1,12 +1,13 @@
 import "server-only";
+import { uploadsReady } from "./s3";
 import { createHmac, randomBytes } from "node:crypto";
 import { SOLUTIONS } from "@/lib/content/solutions";
-import type { Capabilities, Conversation, Persona, Turn, User } from "@/lib/types";
+import type { Capabilities, Conversation, Face, Persona, Turn, User } from "@/lib/types";
 import { claudeReady, scoreTranscript } from "./claude";
 import { id, now, repo } from "./db";
-import { endConversation, ensurePal, startConversation, tavusReady, faceMap } from "./tavus";
+import { endConversation, ensurePal, startConversation, tavusReady, faceMap, getFace } from "./tavus";
 
-export const capabilities = (): Capabilities => ({ video: tavusReady(), claude: claudeReady(), demo: false, billing: !!process.env.STRIPE_SECRET_KEY, email: !!process.env.RESEND_API_KEY });
+export const capabilities = (): Capabilities => ({ uploads: uploadsReady(), faces: !!process.env.TAVUS_API_KEY, video: tavusReady(), claude: claudeReady(), demo: false, billing: !!process.env.STRIPE_SECRET_KEY, email: !!process.env.RESEND_API_KEY });
 
 export const PLAN_MINUTES: Record<string, number> = { starter: 25, builder: 250, growth: 2000, enterprise: 1e9 };
 /** Live minutes used this calendar month (preview sessions are free). */
@@ -55,6 +56,7 @@ export function personaInput(b: Record<string, unknown>, base?: Persona): Omit<P
     role: str("role", base?.role || "Custom"),
     look: str("look", base?.look || "aarohi"),
     faceId: str("faceId", str("face_id", base?.faceId || "")) || undefined,
+    frame: b.frame === "full" ? "full" : b.frame === "head" ? "head" : base?.frame,
     systemPrompt: str("systemPrompt", str("system_prompt", base?.systemPrompt || "You are a helpful AI persona. Disclose you are an AI.")),
     greeting: str("greeting", base?.greeting || "Hi, I'm an AI persona. How can I help?"),
     languages: arr("languages", base?.languages || ["en"]),
@@ -158,4 +160,18 @@ const FOLLOWUPS = [
 export function previewReply(c: Conversation) {
   const n = c.transcript.filter((t) => t.role === "user").length;
   return FOLLOWUPS[(Math.max(1, n) - 1) % FOLLOWUPS.length];
+}
+
+/* ---- Custom faces ---- */
+export const FACE_LIMIT: Record<string, number> = { starter: 1, builder: 3, growth: 10, enterprise: 100 };
+export class FaceLimitError extends Error {}
+
+export async function refreshFace(f: Face): Promise<Face> {
+  if (f.status !== "training" || !f.tavusFaceId || !process.env.TAVUS_API_KEY) return f;
+  try {
+    const t = await getFace(f.tavusFaceId);
+    if (t.status === "completed" || t.status === "ready") { f.status = "ready"; f.readyAt = new Date().toISOString(); await repo.faces.save(f); }
+    else if (t.status === "error") { f.status = "error"; f.error = t.error_message || "Training failed. Check the recording guide and try again."; await repo.faces.save(f); }
+  } catch { /* keep last known status */ }
+  return f;
 }

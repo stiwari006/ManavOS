@@ -33,6 +33,9 @@ r = await req("/api/keys", { method: "POST", body: JSON.stringify({ name: "smoke
 const key = r.body?.secret; check("create API key", typeof key === "string", JSON.stringify(r.body));
 if (key) { const v = await fetch(BASE + "/api/v1/personas", { headers: { authorization: `Bearer ${key}` } }); check("v1 API with key", v.status === 200, v.status); }
 const bad = await fetch(BASE + "/api/v1/personas", { headers: { authorization: "Bearer nope" } }); check("v1 rejects bad key", bad.status === 401, bad.status);
+r = await req("/api/custom-faces"); check("list custom faces", r.status === 200 && Array.isArray(r.body?.faces), r.status);
+r = await req("/api/custom-faces", { method: "POST", body: JSON.stringify({ name: "x", kind: "full", url: "https://example.com/v.mp4" }) });
+check("face needs consent", r.status === 400 || r.status === 503, r.status);
 r = await req("/api/auth/forgot", { method: "POST", body: JSON.stringify({ email }) }); check("forgot password", r.status === 200, r.status);
 r = await req("/api/account"); check("export data", r.status === 200 && !!r.body, r.status);
 const wh = await fetch(BASE + "/api/webhooks/stripe", { method: "POST", body: "{}", headers: { "stripe-signature": "t=1,v1=bad" } }); check("stripe webhook rejects bad signature", wh.status === 400, wh.status);

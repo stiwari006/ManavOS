@@ -16,6 +16,7 @@ export const LEGAL: Record<string, { title: string; body: [string, string][] }> 
   "acceptable-use": { title: "Acceptable use policy", body: [
     ["Always disclose", "Personas must not claim to be human. Disclosure is built in and cannot be disabled."],
     ["No impersonation", "Do not create personas of real people without their verified consent."],
+    ["Custom faces", "Only upload footage of yourself, or of someone who has given you written, informed permission to create an AI likeness of them. Never use footage of public figures, minors, or anyone who hasn't agreed. We keep the consent record with the face, may ask for proof of permission, and remove faces on a valid request from the person shown."],
     ["No deception or harm", "No fraud, harassment, or content that exploits or endangers anyone, especially minors."],
     ["Consequential decisions", "Do not use ManavOS as the sole basis for employment, credit, housing, healthcare or legal decisions."],
   ] },

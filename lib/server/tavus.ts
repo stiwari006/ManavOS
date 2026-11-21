@@ -86,3 +86,23 @@ export async function faceMap(): Promise<Record<string, FaceMedia>> {
     return faceCache?.map ?? {};
   }
 }
+
+/* Custom faces (Phoenix). Full-body framing needs phoenix-4; others use the default model. */
+export async function createFace(o: { name: string; kind: "full" | "head" | "photo"; url: string; callback?: string }) {
+  const body: Record<string, unknown> = { face_name: o.name, callback_url: o.callback };
+  if (o.kind === "photo") {
+    body.train_image_url = o.url; body.auto_fix_training_image = true;
+    body.default_voice_id = process.env.TAVUS_DEFAULT_VOICE_ID;
+  } else {
+    body.train_video_url = o.url;
+    if (o.kind === "full") body.model_name = "phoenix-4";
+  }
+  return call<{ face_id: string; status: string }>("/faces", { method: "POST", body: JSON.stringify(body) });
+}
+export const getFace = (id: string) => call<{ face_id: string; status: string; thumbnail_video_url?: string; error_message?: string }>(`/faces/${id}`);
+export const deleteFace = (id: string) => call<void>(`/faces/${id}`, { method: "DELETE" }).catch(() => undefined);
+export const faceCallbackUrl = () => {
+  const base = process.env.PUBLIC_URL; if (!base) return undefined;
+  const t = process.env.TAVUS_WEBHOOK_TOKEN;
+  return `${base}/api/webhooks/tavus${t ? `?token=${encodeURIComponent(t)}` : ""}`;
+};

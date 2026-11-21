@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/client/api";
 import { SOLUTIONS } from "@/lib/content/solutions";
+import { FEATURED_PALS } from "@/lib/content/pals";
 import { SiteLink } from "@/lib/site/link";
 import type { Turn } from "@/lib/types";
 import { VoiceStage } from "../app/LiveSession";
@@ -25,7 +26,7 @@ export function TryPage() {
       <h1 className="t-h2 mt-3">Talk to {s.personaName}.</h1>
       <p className="t-lead mt-4 max-w-[60ch] text-ink/70">Tap the mic and speak, or type. {live ? "Replies come from Claude in real time." : "This preview uses scripted replies; the full product runs on Claude with photoreal video."} Every persona tells you it&rsquo;s an AI.</p>
       <div className="mt-8 flex gap-1.5 overflow-x-auto pb-2" role="radiogroup" aria-label="Persona">
-        {SOLUTIONS.filter((x) => x.slug !== "custom").map((x) => (
+        {FEATURED_PALS.map((x) => (
           <button key={x.slug} role="radio" aria-checked={slug === x.slug} onClick={() => setSlug(x.slug)}
             className={`t-mono h-11 shrink-0 rounded-full px-5 transition ${slug === x.slug ? "bg-ink text-paper" : "border border-line hover:border-ink"}`}>{x.personaName} · {x.name}</button>
         ))}

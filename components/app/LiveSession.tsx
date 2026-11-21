@@ -155,8 +155,9 @@ export function LivePage() {
   if (conv.mode === "video" && conv.joinUrl) {
     return (
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
-        <div className="overflow-hidden rounded-[18px] bg-ink">
-          <iframe src={conv.joinUrl} title={`Video call with ${persona.name}`} allow="camera; microphone; fullscreen; display-capture; autoplay" className="aspect-[16/10] w-full" />
+        <div className={`overflow-hidden rounded-[18px] bg-ink ${persona.frame === "full" ? "flex justify-center" : ""}`}>
+          <iframe src={conv.joinUrl} title={`Video call with ${persona.name}`} allow="camera; microphone; fullscreen; display-capture; autoplay"
+            className={persona.frame === "full" ? "aspect-[9/16] h-[min(82vh,920px)] max-w-full" : "aspect-[16/10] w-full"} />
         </div>
         <div className={`${card} flex flex-col p-5`}>
           <p className="t-mono flex items-center gap-2 text-mute"><span className="live-dot h-2 w-2 rounded-full bg-accent" />Live video</p>

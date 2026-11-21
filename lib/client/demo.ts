@@ -2,10 +2,10 @@
 /* Browser-only implementation of the API used by the hosted preview build.
    Same surface as the live API; data lives in localStorage; replies are scripted. */
 import { SOLUTIONS } from "@/lib/content/solutions";
-import type { ApiKeyView, Capabilities, Conversation, Doc, Persona, PublicUser, Scorecard } from "@/lib/types";
+import type { ApiKeyView, Capabilities, Conversation, Doc, Face, Persona, PublicUser, Scorecard } from "@/lib/types";
 import type { Api, ConvSummary, DocView, Usage } from "./api";
 
-type Store = { user: PublicUser | null; personas: Persona[]; conversations: Conversation[]; keys: ApiKeyView[]; docs: Doc[] };
+type Store = { user: PublicUser | null; personas: Persona[]; conversations: Conversation[]; keys: ApiKeyView[]; docs: Doc[]; faces?: Face[] };
 const KEY = "hos-demo-store";
 let mem: Store | null = null;
 const rid = (p: string) => `${p}_${Math.random().toString(36).slice(2, 14)}`;
@@ -53,7 +53,23 @@ export const demo: Api = {
   signup: async (b) => { const s = load(); s.user = { id: rid("usr"), email: b.email, name: b.name || b.email.split("@")[0], company: b.company, type: b.type === "teams" ? "teams" : "developer", plan: b.plan || "starter", createdAt: now(), webhookSecret: "whsec_preview" }; seed(s.user.id); persist(); return s.user; },
   login: async (b) => { const s = load(); if (!s.user) { return demo.signup(b); } if (s.user.email !== b.email) s.user.email = b.email; persist(); return s.user; },
   logout: async () => { const s = load(); s.user = null; persist(); },
-  capabilities: async (): Promise<Capabilities> => ({ video: false, claude: false, demo: true }),
+  capabilities: async (): Promise<Capabilities> => ({ video: false, claude: false, demo: true, faces: true, uploads: true }),
+  faces: {
+    list: async () => {
+      const s = load(); s.faces ??= [];
+      // Preview: training "finishes" 20 seconds after upload.
+      s.faces.forEach((f) => { if (f.status === "training" && Date.now() - Date.parse(f.createdAt) > 20000) { f.status = "ready"; f.readyAt = now(); } });
+      persist(); return { faces: s.faces, limit: 3 };
+    },
+    get: async (id) => { const f = (await demo.faces.list()).faces.find((x) => x.id === id); if (!f) throw new Error("Face not found"); return f; },
+    create: async (b) => {
+      const s = load(); s.faces ??= [];
+      const f: Face = { id: rid("face"), ownerId: s.user?.id || "", name: b.name, kind: b.kind, status: "training", tavusFaceId: rid("f"), source: b.key || b.url || "", consent: { by: b.consentName, statement: b.consent, at: now() }, createdAt: now() };
+      s.faces.unshift(f); persist(); return f;
+    },
+    remove: async (id) => { const s = load(); s.faces = (s.faces || []).filter((x) => x.id !== id); persist(); return {}; },
+    upload: async (_file, onProgress) => { for (let i = 1; i <= 10; i++) { await wait(120); onProgress(i / 10); } return "preview-upload"; },
+  },
   personas: {
     list: async () => load().personas,
     get: async (id) => { const p = load().personas.find((x) => x.id === id); if (!p) throw new Error("Persona not found"); return p; },

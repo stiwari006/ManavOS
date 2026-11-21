@@ -1,10 +1,24 @@
 "use client";
 import { DEMO } from "@/lib/site/link";
-import type { ApiKeyView, Capabilities, Conversation, Doc, Persona, PublicUser } from "@/lib/types";
+import type { ApiKeyView, Capabilities, Conversation, Doc, Face, Persona, PublicUser } from "@/lib/types";
 import { demo } from "./demo";
 
 export type ConvSummary = Omit<Conversation, "transcript"> & { turns: number };
 export type DocView = Omit<Doc, "text"> & { chars: number };
+export type FaceInput = { name: string; kind: Face["kind"]; key?: string; url?: string; consent: "self" | "permission"; consentName: string };
+
+/** PUT a file straight to the bucket, with progress (0..1). */
+function putFile(url: string, file: File, onProgress: (p: number) => void) {
+  return new Promise<void>((res, rej) => {
+    const x = new XMLHttpRequest();
+    x.open("PUT", url); x.setRequestHeader("content-type", file.type);
+    x.upload.onprogress = (e) => e.lengthComputable && onProgress(e.loaded / e.total);
+    x.onload = () => (x.status < 300 ? res() : rej(new Error(`Upload failed (${x.status})`)));
+    x.onerror = () => rej(new Error("Upload failed. Check your connection and try again."));
+    x.send(file);
+  });
+}
+
 export type Usage = { plan: string; month: string; minutes: number; included: number; conversations: number; byMode: Record<string, number>; days: Record<string, number> };
 
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
@@ -54,6 +68,17 @@ const live = {
     list: () => req<{ documents: DocView[] }>("/api/documents").then((d) => d.documents),
     create: (b: { name?: string; url?: string; text?: string; tags?: string[] }) => post<{ document: DocView }>("/api/documents", b).then((d) => d.document),
     remove: (id: string) => req(`/api/documents/${id}`, { method: "DELETE" }),
+  },
+  faces: {
+    list: () => req<{ faces: Face[]; limit: number }>("/api/custom-faces"),
+    get: (id: string) => req<{ face: Face }>(`/api/custom-faces/${id}`).then((d) => d.face),
+    create: (b: FaceInput) => post<{ face: Face }>("/api/custom-faces", b).then((d) => d.face),
+    remove: (id: string) => req(`/api/custom-faces/${id}`, { method: "DELETE" }),
+    async upload(file: File, onProgress: (p: number) => void) {
+      const { key, uploadUrl } = await post<{ key: string; uploadUrl: string }>("/api/custom-faces/upload", { type: file.type, size: file.size });
+      await putFile(uploadUrl, file, onProgress);
+      return key;
+    },
   },
   usage: () => req<Usage>("/api/usage"),
   settings: (b: { name?: string; company?: string; webhookUrl?: string }) => req<{ user: PublicUser }>("/api/settings", { method: "PATCH", body: JSON.stringify(b) }).then((d) => d.user),

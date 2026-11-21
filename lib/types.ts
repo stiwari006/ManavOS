@@ -3,7 +3,15 @@ export type Persona = {
   id: string; ownerId: string; name: string; role: string; look: string; faceId?: string;
   systemPrompt: string; greeting: string; languages: string[]; rubric: string[];
   memory: boolean; perception: boolean; documentIds: string[]; stock?: boolean;
-  tavusPalId?: string; createdAt: string; updatedAt: string;
+  tavusPalId?: string; frame?: "full" | "head"; createdAt: string; updatedAt: string;
+};
+
+/** A face trained from the customer's own footage (Tavus Phoenix). */
+export type Face = {
+  id: string; ownerId: string; name: string; kind: "full" | "head" | "photo";
+  status: "training" | "ready" | "error"; tavusFaceId?: string; error?: string;
+  source: string; consent: { by: string; statement: string; at: string };
+  createdAt: string; readyAt?: string;
 };
 export type Turn = { role: "assistant" | "user"; content: string; at: number };
 export type Score = { criterion: string; score: number; evidence: string };
@@ -20,4 +28,5 @@ export type ApiKeyView = Omit<ApiKey, "hash">;
 export type Doc = { id: string; ownerId: string; name: string; url?: string; text?: string; tags: string[]; createdAt: string; tavusId?: string };
 export type User = { id: string; email: string; name: string; company?: string; type: "developer" | "teams"; plan: string; passHash: string; webhookUrl?: string; webhookSecret: string; createdAt: string; sessionVersion?: number; stripeCustomerId?: string; stripeSubscriptionId?: string };
 export type PublicUser = Omit<User, "passHash" | "webhookSecret" | "sessionVersion" | "stripeCustomerId" | "stripeSubscriptionId"> & { webhookSecret?: string; billing?: boolean };
-export type Capabilities = { video: boolean; claude: boolean; demo: boolean; billing?: boolean; email?: boolean };
+export type Capabilities = {
+  uploads?: boolean; faces?: boolean; video: boolean; claude: boolean; demo: boolean; billing?: boolean; email?: boolean };

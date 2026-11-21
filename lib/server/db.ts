@@ -1,7 +1,7 @@
 import "server-only";
 import { mkdirSync, readFileSync, renameSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
-import type { ApiKey, Conversation, Doc, Persona, User } from "@/lib/types";
+import type { ApiKey, Conversation, Doc, Face, Persona, User } from "@/lib/types";
 
 /* Storage: one record per key, so concurrent writes to different records never clash.
    - On Netlify: Netlify Blobs (persists across deploys, no setup).
@@ -91,6 +91,13 @@ export const repo = {
     async getMany(owner: string, ids: string[]) { return (await Promise.all(ids.map((i) => kv.get<Doc>(`d/${owner}/${i}`)))).filter(Boolean) as Doc[]; },
     save: (d: Doc) => kv.set(`d/${d.ownerId}/${d.id}`, d),
     async del(owner: string, id: string) { const d = await kv.get<Doc>(`d/${owner}/${id}`); if (!d) return false; await kv.del(`d/${owner}/${id}`); return true; },
+  },
+  faces: {
+    list: (owner: string) => many<Face>(`f/${owner}/`).then((l) => l.sort((a, b) => b.createdAt.localeCompare(a.createdAt))),
+    get: (owner: string, id: string) => kv.get<Face>(`f/${owner}/${id}`),
+    async byTavus(tid: string) { const r = await kv.get<Ref>(`ft/${tid}`); return r ? kv.get<Face>(`f/${r.owner}/${r.id}`) : null; },
+    async save(f: Face) { await kv.set(`f/${f.ownerId}/${f.id}`, f); if (f.tavusFaceId) await kv.set(`ft/${f.tavusFaceId}`, { owner: f.ownerId, id: f.id }); },
+    async del(f: Face) { if (f.tavusFaceId) await kv.del(`ft/${f.tavusFaceId}`); await kv.del(`f/${f.ownerId}/${f.id}`); },
   },
   leads: { insert: (l: { id: string }) => kv.set(`l/${l.id}`, l) },
   stripe: {

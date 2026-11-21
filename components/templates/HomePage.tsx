@@ -10,6 +10,7 @@ import { Developers } from "../Developers";
 import { DitherHuman } from "../DitherHuman";
 import { Enterprise } from "../Enterprise";
 import { Models } from "../Models";
+import { PalGallery } from "../PalGallery";
 import { CallStage } from "../page/CallStage";
 import { SectionHead } from "../page/Blocks";
 import { Reveal, RevealLines } from "../Reveal";
@@ -75,6 +76,8 @@ export function HomePage() {
           </div>
         </motion.div>
       </section>
+
+      <PalGallery />
 
       {/* What you can build */}
       <section className="section">

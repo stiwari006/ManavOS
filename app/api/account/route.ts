@@ -1,4 +1,5 @@
 import { clearSession, verifyPassword } from "@/lib/server/auth";
+import { deleteFace } from "@/lib/server/tavus";
 import { repo } from "@/lib/server/db";
 import { body, fail, json, withUser } from "@/lib/server/http";
 
@@ -7,7 +8,8 @@ export async function GET() {
   return withUser(async (u) => {
     const { passHash: _p, ...profile } = u;
     const [personas, conversations, keys, documents] = await Promise.all([repo.personas.list(u.id), repo.convs.list(u.id), repo.keys.list(u.id), repo.docs.list(u.id)]);
-    const out = { exportedAt: new Date().toISOString(), profile, personas, conversations, apiKeys: keys.map(({ hash: _h, ...k }) => k), documents };
+    const faces = await repo.faces.list(u.id);
+    const out = { exportedAt: new Date().toISOString(), profile, personas, conversations, apiKeys: keys.map(({ hash: _h, ...k }) => k), documents, faces: faces.map(({ source: _s, ...f }) => f) };
     return new Response(JSON.stringify(out, null, 2), { headers: { "content-type": "application/json", "content-disposition": `attachment; filename="account-export.json"` } });
   });
 }
@@ -23,6 +25,7 @@ export async function DELETE(req: Request) {
       ...conversations.map((c) => repo.convs.del(c)),
       ...keys.map((k) => repo.keys.del(u.id, k.id)),
       ...documents.map((d) => repo.docs.del(u.id, d.id)),
+      ...(await repo.faces.list(u.id)).map(async (f) => { if (f.tavusFaceId) await deleteFace(f.tavusFaceId); await repo.faces.del(f); }),
     ]);
     await repo.users.del(u);
     await clearSession();

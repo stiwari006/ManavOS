@@ -5,7 +5,7 @@ import { api, type ConvSummary, type DocView, type Usage } from "@/lib/client/ap
 import type { PersonaKey } from "@/lib/render/engine";
 import { PERSONAS } from "@/lib/render/engine";
 import { SiteLink, go } from "@/lib/site/link";
-import type { ApiKeyView, Conversation, Persona } from "@/lib/types";
+import type { ApiKeyView, Conversation, Face, Persona } from "@/lib/types";
 import { DitherHuman } from "../DitherHuman";
 import { PageTitle, ago, btnDark, btnLine, card, dur, field, useApp, useParam } from "./AppShell";
 
@@ -175,7 +175,7 @@ export function PersonaEditor() {
                 </button>
               ))}
             </div>
-            <label className="mt-4 grid gap-1.5"><span className="text-[0.88rem]">Tavus face ID <span className="text-mute">(optional, for a custom video face)</span></span><input value={p.faceId || ""} onChange={(e) => set("faceId", e.target.value)} className={field} placeholder="r4b03c679d42" /></label>
+            <CustomFacePicker value={p.faceId} onChange={(faceId, frame) => { setP((x) => ({ ...x, faceId: faceId ?? "", frame: frame ?? "head" })); setSaved(false); }} />
           </section>
           <section className={`${card} p-5`}>
             <p className="t-mono mb-4 text-mute">Personality</p>
@@ -493,6 +493,24 @@ function BillingActions({ plan }: { plan: string }) {
       {plan !== "growth" && plan !== "enterprise" && <button onClick={() => run("growth", () => api.checkout("growth"))} className={btnLine}>{busy === "growth" ? "Opening…" : "Growth"}</button>}
       {plan !== "starter" && <button onClick={() => run("portal", api.portal)} className={btnLine}>{busy === "portal" ? "Opening…" : "Manage billing"}</button>}
       {err && <span role="alert" className="w-full text-[0.85rem] text-accent">{err}</span>}
+    </div>
+  );
+}
+
+/** Lets a persona use one of the customer's trained faces instead of a stock look. */
+function CustomFacePicker({ value, onChange }: { value?: string; onChange: (faceId: string | undefined, frame: "full" | "head" | undefined) => void }) {
+  const [faces, setFaces] = useState<Face[]>([]);
+  useEffect(() => { api.faces.list().then((d) => setFaces(d.faces.filter((f) => f.status === "ready"))).catch(() => {}); }, []);
+  return (
+    <div className="mt-4 grid gap-1.5">
+      <label htmlFor="custom-face" className="text-[0.88rem]">Your own face <span className="text-mute">(overrides the stock look in live video)</span></label>
+      <select id="custom-face" value={value || ""} className={field}
+        onChange={(e) => { const f = faces.find((x) => x.tavusFaceId === e.target.value); onChange(e.target.value || undefined, f ? (f.kind === "full" ? "full" : "head") : undefined); }}>
+        <option value="">None: use the stock face above</option>
+        {faces.map((f) => <option key={f.id} value={f.tavusFaceId}>{f.name}{f.kind === "full" ? " (full body)" : ""}</option>)}
+        {value && !faces.some((f) => f.tavusFaceId === value) && <option value={value}>Face {value}</option>}
+      </select>
+      {faces.length === 0 && <p className="text-[0.82rem] text-mute">No trained faces yet. <SiteLink href="/app/faces" className="underline">Create one</SiteLink>.</p>}
     </div>
   );
 }
